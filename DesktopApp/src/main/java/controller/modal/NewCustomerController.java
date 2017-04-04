@@ -34,7 +34,7 @@ public class NewCustomerController implements ModalController<Object, Customer> 
             customer.setName(name);
             customer.setSurname(surname);
             customer.setMobile(mobile);
-            customer.setEmail(email);
+//            customer.setEmail(email);
             CustomerService customerService = context.getBean(CustomerService.class);
             customerService.create(customer);
 

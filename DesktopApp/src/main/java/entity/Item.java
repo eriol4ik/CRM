@@ -2,17 +2,15 @@ package entity;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import service.StorageService;
-import util.ApplicationContextFactory;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
+@Table(name = "items")
 @Entity
-@Table(name = "ITEMS")
-public class Item {
-
+public class Item implements Serializable {
     @Id
     @Column(name = "ITEM_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +20,10 @@ public class Item {
     @JoinColumn(name = "PRODUCT_ID", nullable = false)
     private Product product;
 
-    @Column(name = "PRICE", nullable = false)
+    @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(name = "AMOUNT", nullable = false)
+    @Column(nullable = false)
     private Integer amount;
 
     @ManyToOne
@@ -40,10 +38,9 @@ public class Item {
     public Item() {}
 
     public Item(Product product, Integer amount, Order order) {
-        this.product = product;
-        this.price = product.getPrice();
+        setProduct(product);
         this.amount = amount;
-        this.order = order;
+        setOrder(order);
     }
 
     public Long getId() {
@@ -55,34 +52,60 @@ public class Item {
     public Product getProduct() {
         return product;
     }
-    public void setProduct(Product product) {this.product = product;}
+    public void setProduct(Product product) {
+        this.product = product;
+        setPrice(product.getPrice());
+    }
+    public String getProductName() {
+        return product.getName();
+    }
     public BigDecimal getPrice() {
         return price;
     }
     public void setPrice(BigDecimal price) {
-        this.price = price;
+        if (order != null && price != null && amount != null) {
+            order.setSummary(order.getSummary()
+                                .add((price.subtract(this.price))
+                                .multiply(BigDecimal.valueOf(amount))
+                                .multiply(BigDecimal.valueOf(1.2))));
+        }
+        if (price != null) {
+            this.price = price;
+        }
     }
     public Integer getAmount() {
         return amount;
     }
     public void setAmount(Integer amount) {
-        this.amount = amount;
+        if (order != null && price != null && amount != null) {
+            order.setSummary(order.getSummary()
+                                .add(price.multiply(BigDecimal.valueOf(amount - this.amount))
+                                .multiply(BigDecimal.valueOf(1.2))));
+            order.setAmount(order.getAmount() + (amount - this.amount));
+            if (amount == 0) {
+                order.getItems().remove(this);
+            }
+        }
+        if (amount != null) {
+            this.amount = amount;
+        }
     }
     public Order getOrder() {
         return order;
     }
     public void setOrder(Order order) {
         this.order = order;
+        if (order != null && price != null && amount != null) {
+            order.setSummary(order.getSummary()
+                    .add(price.multiply(BigDecimal.valueOf(amount))
+                              .multiply(BigDecimal.valueOf(1.2))));
+            order.setAmount(order.getAmount() + amount);
+        }
     }
 
     public BigDecimal getPriceVAT() {
         return price.multiply(BigDecimal.valueOf(1.2));
     }
-
-    public String getPriceVATFormat() {
-        return priceVATProperty().get();
-    }
-
     public BigDecimal getSumNoVAT() {
         return price.multiply(BigDecimal.valueOf(amount));
     }
@@ -90,48 +113,13 @@ public class Item {
         return getPriceVAT().multiply(BigDecimal.valueOf(amount));
     }
 
-    public SimpleStringProperty productNameProperty() {
-        return new SimpleStringProperty(product.getName());
+    // for jsp displaying
+    public String getPriceVATFormat() {
+        return decimalFormat.format(getPriceVAT());
     }
-    public SimpleStringProperty priceProperty() {
-        return new SimpleStringProperty(decimalFormat.format(price));
+    public String getSumVATFormat() {
+        return decimalFormat.format(getSumVAT());
     }
-    public SimpleStringProperty priceVATProperty() {
-        return new SimpleStringProperty(decimalFormat.format(getPriceVAT()));
-    }
-    public SimpleStringProperty sumProperty() {
-        return new SimpleStringProperty(decimalFormat.format(getSumNoVAT()));
-    }
-    public SimpleStringProperty sumVATProperty() {
-        return new SimpleStringProperty(decimalFormat.format(getSumVAT()));
-    }
-    public SimpleIntegerProperty availabilityProperty() {
-        if (availability != null) return availability;
-        return availability = new SimpleIntegerProperty(
-                ApplicationContextFactory.getApplicationContext()
-                        .getBean(StorageService.class).getAvailability(this.product));
-    }
-    public SimpleStringProperty inStockProperty() {
-        if (this.availabilityProperty().get() >= this.amount) {
-            return new SimpleStringProperty("+");
-        } else {
-            return new SimpleStringProperty("-");
-        }
-    }
-
-    /* AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-
-    public Integer getStorage() {
-        ApplicationContext context = ApplicationContextFactory.getApplicationContext();
-        StorageService storageService = (StorageService) context.getBean("storageService");
-        List<Storage> storages = storageService.findAll();
-        for (Storage storage : storages) {
-            if (storage.getProduct().getId().equals(this.getProduct().getId())) {
-                return storage.getAvailability();
-            }
-        }
-        return 0;
-    }*/
 
     @Override
     public String toString() {

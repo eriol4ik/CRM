@@ -1,48 +1,47 @@
 package entity;
 
-import service.CustomerService;
-import util.ApplicationContextFactory;
-
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+@Table(name = "customers")
 @Entity
-@Table(name = "CUSTOMERS")
-public class Customer {
-
+public class Customer implements Serializable {
     @Id
     @Column(name = "CUSTOMER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "NAME", nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "SURNAME")
     private String surname;
 
-    @Column(name = "MOBILE")
+    @Column(unique = true)
     private String mobile;
 
-    @Column(name = "EMAIL")
-    private String email;
+    private String city;
+    private String street;
+    private String houseNumber;
 
-    @Column
-    private String address;
+    @OneToMany
+    @JoinColumn(name = "CUSTOMER_ID")
+    private List<Order> orders = new ArrayList<>();
 
-    /*@OneToMany(mappedBy = "customer")
-    private List<Order> orders = new ArrayList<>();*/
-
-    transient private List<Order> orders;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "email", unique = true)
+    private CustomerAccount account;
 
     public Customer() {}
 
-    public Customer(String name, String surname, String mobile, String email, String address) {
+    public Customer(String name, String surname, String mobile, String city, String street, String houseNumber) {
         this.name = name;
         this.surname = surname;
         this.mobile = mobile;
-        this.email = email;
-        this.address = address;
+        this.city = city;
+        this.street = street;
+        this.houseNumber = houseNumber;
     }
 
     public Long getId() {
@@ -77,32 +76,44 @@ public class Customer {
         this.mobile = mobile;
     }
 
-    public String getEmail() {
-        return email;
+    public String getCity() {
+        return city;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getAddress() {
-        return address;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getHouseNumber() {
+        return houseNumber;
+    }
+
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
     }
 
     public List<Order> getOrders() {
-
-        return orders == null ? orders = ApplicationContextFactory
-                .getApplicationContext()
-                .getBean(CustomerService.class)
-                .findOrders(this) : orders;
+        return orders;
     }
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public CustomerAccount getAccount() {
+        return account;
+    }
+
+    public void setAccount(CustomerAccount account) {
+        this.account = account;
     }
 
     @Override

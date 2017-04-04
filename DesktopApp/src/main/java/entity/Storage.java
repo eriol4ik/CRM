@@ -1,5 +1,6 @@
 package entity;
 
+
 import javafx.beans.property.SimpleStringProperty;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
+@Table(name = "storage")
 @Entity
 public class Storage implements Serializable {
     @Id
@@ -14,7 +16,6 @@ public class Storage implements Serializable {
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 
-    @Column
     private Integer amount;
 
     private transient DecimalFormat decimalFormat = new DecimalFormat("#0.00");

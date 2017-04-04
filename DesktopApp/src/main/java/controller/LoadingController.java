@@ -12,8 +12,9 @@ public class LoadingController {
         LoadingService service = new LoadingService();
         service.setOnSucceeded((event) -> {
             UserSession session = service.getValue();
+            System.out.println(session);
             if (session == null) {
-                StageFactory.loadWindow("/view/login_panel.fxml", "CRM", -1L);
+                StageFactory.loadWindow("/view/login_panel.fxml", "CRM", "-1L");
             } else {
                 User user = ApplicationContextFactory.getApplicationContext()
                         .getBean(UserService.class).read(session.getUserId());

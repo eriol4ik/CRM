@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 public class StorageController implements MainController {
     @FXML private TableView<Order> ordersTable;
@@ -119,7 +118,7 @@ public class StorageController implements MainController {
     }
 
     public void storageButtonOnAction() {
-        StageFactory.loadWindow("/view/storage_items_panel.fxml", "Storage", -1L);
+        StageFactory.loadWindow("/view/storage_items_panel.fxml", "Storage", "-1L");
     }
 
     @FXML

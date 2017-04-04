@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository("userSessionDAO")
-public class UserSessionDAOImpl extends DAOImpl<UserSession> implements UserSessionDAO {
+public class UserSessionDAOImpl extends DAOImpl<UserSession, String> implements UserSessionDAO {
     @Autowired
     private SessionFactory factory;
 

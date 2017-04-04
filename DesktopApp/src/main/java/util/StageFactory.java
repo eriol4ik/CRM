@@ -30,7 +30,7 @@ public class StageFactory {
     }
 
     public static <ControllerT extends MainController>
-            void loadWindow(String resource, String title, Long userId) {
+            void loadWindow(String resource, String title, String userId) {
         Double currentWidth = stageWindow.getWidth();
         Double currentHeight = stageWindow.getHeight();
 
@@ -48,7 +48,7 @@ public class StageFactory {
 
         // Important: UserSession is setting after initialize() method in Controller
         // Controller loads in 'loader.load()'
-        if (!Long.valueOf(-1L).equals(userId)) {
+        if (!"-1L".equals(userId)) {
             UserSession session = ApplicationContextFactory.getApplicationContext()
                     .getBean(UserSessionService.class).writeToResource(userId);
             if (userId != null) {

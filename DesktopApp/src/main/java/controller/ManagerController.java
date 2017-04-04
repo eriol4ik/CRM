@@ -12,18 +12,18 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
-import service.*;
 import org.springframework.context.ApplicationContext;
+import service.*;
 import util.ApplicationContextFactory;
 import util.InputDataChecker;
 import util.StageFactory;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.sql.Date;
 
 public class ManagerController implements MainController {
     @FXML private Button logOutButton;
@@ -369,7 +369,6 @@ public class ManagerController implements MainController {
             // How????!!!
             // upd: understand (because of helper.selectCurrentOrder(); <- items.setAll(currentOrder.getItems());
             currentOrder.getItems().add(currentItem);
-            currentOrder.updateSummaryAndAmount();
             if (!helper.isCurrentOrderNew()) {
                 orders.set(orders.indexOf(currentOrder), currentOrder);
             }
@@ -440,7 +439,6 @@ public class ManagerController implements MainController {
             currentItem.setAmount(amount);
 
             itemService.update(currentItem);
-            currentOrder.updateSummaryAndAmount();
             if (!helper.isCurrentOrderNew()) {
                 orders.set(orders.indexOf(currentOrder), currentOrder);
             }
@@ -503,7 +501,14 @@ public class ManagerController implements MainController {
     public void setUserSession(UserSession session) {
         this.userSession = session;
         if (userSession != null) currentManager = userService.read(userSession.getUserId()).getEmployee();
-        orders = FXCollections.observableArrayList(orderService.findAllFor(currentManager));
+//        orders = FXCollections.observableArrayList(orderService.findAllFor(currentManager));
+        orders = FXCollections.observableArrayList(orderService.findWithStatus(OrderStatus.OPENED));
+        ordersTable.setItems(orders);
+    }
+
+    @FXML
+    public void refresh() {
+        orders = FXCollections.observableArrayList(orderService.findWithStatus(OrderStatus.OPENED));
         ordersTable.setItems(orders);
     }
 

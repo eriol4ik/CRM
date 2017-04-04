@@ -1,36 +1,44 @@
 package entity;
 
-
-import javafx.beans.property.SimpleStringProperty;
+import enum_types.Capacity;
+import enum_types.Color;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.List;
 
+@Table(name = "products")
 @Entity
-@Table(name = "PRODUCTS")
 public class Product implements Serializable {
-
     @Id
     @Column(name = "PRODUCT_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "NAME", nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "PRICE", nullable = false)
+    @Column(nullable = false)
     private BigDecimal price;
 
-    @Column
     private String filename;
+
+    @OneToMany
+    @JoinColumn(name = "PRODUCT_ID")
+    private List<Picture> pictureList;
+
+    @Enumerated(EnumType.STRING)
+    private Capacity capacity;
+
+    @Enumerated(EnumType.STRING)
+    private Color color;
 
     @Column(length = 1000)
     private String description;
 
-    private transient DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-
+    private transient DecimalFormat format = new DecimalFormat("#0.00");
 
     public Product() {}
 
@@ -69,6 +77,30 @@ public class Product implements Serializable {
         this.filename = filename;
     }
 
+    public Capacity getCapacity() {
+        return capacity;
+    }
+
+    public String getCapacityString() {
+        return capacity.toString();
+    }
+
+    public void setCapacity(Capacity capacity) {
+        this.capacity = capacity;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public String getColorString() {
+        return color.toString();
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -81,16 +113,43 @@ public class Product implements Serializable {
         return price.multiply(BigDecimal.valueOf(1.2));
     }
 
-    public String getPriceVATFormat() {
-        return priceVATProperty().get();
+    public String getPriceFormat() {
+        return format.format(getPrice());
     }
 
-    public SimpleStringProperty priceVATProperty() {
-        return new SimpleStringProperty(decimalFormat.format(getPriceVAT()));
+    public String getPriceVATFormat() {
+        return format.format(getPriceVAT());
+    }
+
+    public List<Picture> getPictureList() {
+        return pictureList;
+    }
+
+    public void setPictureList(List<Picture> pictureList) {
+        this.pictureList = pictureList;
     }
 
     @Override
     public String toString() {
         return name + ": " + price;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * id.hashCode() +
+                31 * name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true;
+
+        if (obj.getClass() != getClass()) return false;
+        Product product = (Product) obj;
+
+        if (this.id == null || product.id == null) return false;
+
+        return this.id.equals(product.id) && this.name.equals(product.name);
     }
 }

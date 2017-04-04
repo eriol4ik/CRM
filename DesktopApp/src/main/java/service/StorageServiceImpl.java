@@ -5,11 +5,10 @@ import entity.Product;
 import entity.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service("storageService")
-public class StorageServiceImpl extends ServiceImpl<Storage> implements StorageService {
+public class StorageServiceImpl extends ServiceImpl<Storage, Product> implements StorageService {
     @Autowired
     @Qualifier("storageDAO")
     private StorageDAO storageDAO;

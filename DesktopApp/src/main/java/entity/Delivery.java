@@ -1,38 +1,37 @@
 package entity;
 
 import enum_types.DeliveryType;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 
 @Entity
-public class Delivery {
+public class Delivery implements Serializable {
     @Id
     @Column(name = "DELIVERY_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ADRESS")
-    private String adress;
+    private String address;
 
     @Column
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private DeliveryType deliveryType;
 
-    @Column(name = "DATE")
     private Date date;
 
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
     private Order order;
 
-    @Column(name = "Description", length = 1000)
+    @Column(length = 1000)
     private String description;
 
-    public Delivery() {
-    }
+    public Delivery() {}
 
-    public Delivery(String adress, DeliveryType deliveryType, Date date, Order order) {
-        this.adress = adress;
+    public Delivery(String address, DeliveryType deliveryType, Date date, Order order) {
+        this.address = address;
         this.deliveryType = deliveryType;
         this.date = date;
         this.order = order;
@@ -46,12 +45,12 @@ public class Delivery {
         this.id = id;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Date getDate() {

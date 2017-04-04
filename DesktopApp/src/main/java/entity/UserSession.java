@@ -1,7 +1,11 @@
 package entity;
 
 import org.springframework.context.ApplicationContext;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,22 +14,22 @@ public class UserSession {
     private static ApplicationContext context;
 
     @Id
-    private Long userId;
+    private String userId;
 
     @Column(name = "SESSION_ID")
     private Integer sessionId;
 
     public UserSession() {}
 
-    public UserSession(Long userId) {
+    public UserSession(String userId) {
         this.userId = userId;
         sessionId = LocalDateTime.now().toString().hashCode();
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
     public Integer getSessionId() {

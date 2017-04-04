@@ -119,7 +119,7 @@ public class EmailSender {
             user.setPassword(
                     ApplicationContextFactory.getApplicationContext()
                             .getBean(UserService.class)
-                            .read(user.getId()).getPassword());
+                            .read(user.getLogin()).getPassword());
             return false;
         }
     }

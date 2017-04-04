@@ -3,13 +3,15 @@ package dao;
 import entity.Employee;
 import entity.Item;
 import entity.Order;
+import enum_types.OrderStatus;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 @Repository("orderDAO")
-public class OrderDAOImpl extends DAOImpl<Order> implements OrderDAO {
+public class OrderDAOImpl extends DAOImpl<Order, Long> implements OrderDAO {
     @Autowired
     private SessionFactory factory;
 
@@ -29,6 +31,14 @@ public class OrderDAOImpl extends DAOImpl<Order> implements OrderDAO {
         return factory.getCurrentSession()
                 .createQuery("SELECT i FROM Item i WHERE i.order = :order", Item.class)
                 .setParameter("order", order)
+                .list();
+    }
+
+    @Override
+    public List<Order> findWithStatus(OrderStatus status) {
+        return factory.getCurrentSession()
+                .createQuery("SELECT o FROM Order o WHERE o.status = :status", Order.class)
+                .setParameter("status", status)
                 .list();
     }
 }

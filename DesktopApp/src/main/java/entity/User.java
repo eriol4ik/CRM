@@ -1,19 +1,15 @@
 package entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
+@Table(name = "users")
 @Entity
-@Table(name = "USERS")
-public class User {
+public class User implements Serializable {
     @Id
-    @Column(name = "USER_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "LOGIN")
     private String login;
 
-    @Column(name = "PASSWORD")
+    // todo: hash
     private String password;
 
     @OneToOne
@@ -26,14 +22,6 @@ public class User {
         this.login = login;
         this.password = password;
         this.employee = employee;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getLogin() {
@@ -77,6 +65,5 @@ public class User {
 
         return login.equals(user.login);
     }
-
 
 }

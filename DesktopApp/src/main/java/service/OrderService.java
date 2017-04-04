@@ -1,12 +1,13 @@
 package service;
 
 import entity.Employee;
-import entity.Item;
 import entity.Order;
+import enum_types.OrderStatus;
 
 import java.util.List;
 
-public interface OrderService extends Service<Order> {
+public interface OrderService extends Service<Order, Long> {
     List<Order> findAllFor(Employee manager);
-    List<Item> findItems(Order order);
+    Order readWithItems(Long id);
+    List<Order> findWithStatus(OrderStatus status);
 }

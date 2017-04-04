@@ -3,40 +3,33 @@ package entity;
 import enum_types.PaymentType;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
-public class Payment {
+public class Payment implements Serializable {
     @Id
     @Column(name = "PAYMENT_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
 
-    @Column(name = "AMOUNT")
-    private BigDecimal amount;
-
-    @Column(name = "DATE")
     private Date date;
 
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
     private Order order;
 
-    @Column(name = "Description", length = 1000)
+    @Column(length = 1000)
     private String description;
 
-    public Payment() {
-    }
+    public Payment() {}
 
-    public Payment(PaymentType paymentType, BigDecimal amount, Order order) {
+    public Payment(PaymentType paymentType, Order order) {
         this.paymentType = paymentType;
-        this.amount = amount;
         this.date = Date.valueOf(LocalDate.now());
         this.order = order;
     }
@@ -55,14 +48,6 @@ public class Payment {
 
     public void setPaymentType(PaymentType paymentType) {
         this.paymentType = paymentType;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
     }
 
     public Date getDate() {

@@ -1,11 +1,10 @@
 package entity;
 
 import enum_types.OrderStatus;
-import javafx.beans.property.SimpleStringProperty;
-import service.OrderService;
-import util.ApplicationContextFactory;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.DecimalFormat;
@@ -13,10 +12,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Table(name = "orders")
 @Entity
-@Table(name = "ORDERS")
-public class Order {
-
+public class Order implements Serializable {
     @Id
     @Column(name = "ORDER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,44 +28,37 @@ public class Order {
     @JoinColumn(name = "CUSTOMER_ID")
     private Customer customer;
 
-    @OneToMany
-    @JoinColumn(name = "PAYMENT_ID")
-    private List<Payment> paymentList;
+    @OneToOne
+    @JoinColumn(name = "ORDER_ID")
+    private Payment payment;
 
-    @OneToMany
-    @JoinColumn(name = "DELIVERY_ID")
-    private List<Delivery> deliveryList;
+    @OneToOne
+    @JoinColumn(name = "ORDER_ID")
+    private Delivery delivery;
 
-//    @Temporal(TemporalType.DATE)
-    @Column(name = "DATE", nullable = false)
     private Date date;
 
-//    @Temporal(TemporalType.DATE)
-    @Column(name = "DEADLINE")
     private Date deadline;
 
-    /*@OneToMany(mappedBy = "order")
-    private List<Item> items = new ArrayList<>();*/
+    @OneToMany(orphanRemoval = true)
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+    @JoinColumn(name = "ORDER_ID")
+    private List<Item> items = new ArrayList<>();
 
-    transient private List<Item> items;
-
-    @Column(name = "STATUS")
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @Column(name = "SUMMARY")
-    private BigDecimal summary;
+    private BigDecimal summary = BigDecimal.ZERO;
 
-    @Column
-    private Integer amount;
+    private Integer amount = 0;
 
-    @Column(name = "DESCRIPTION", length = 1000)
+    @Column(length = 1000)
     private String description;
 
-
-    private transient DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+    private transient DecimalFormat format = new DecimalFormat("#0.00");
 
     public Order() {
-        this.date = Date.valueOf(LocalDate.now());
+        System.out.println("creating order");
     }
 
     public Order(Employee manager, Customer customer, Date deadline) {
@@ -126,20 +117,20 @@ public class Order {
         this.status = status;
     }
 
-    public List<Payment> getPaymentList() {
-        return paymentList;
+    public Payment getPayment() {
+        return payment;
     }
 
-    public void setPaymentList(List<Payment> paymentList) {
-        this.paymentList = paymentList;
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
-    public List<Delivery> getDeliveryList() {
-        return deliveryList;
+    public Delivery getDelivery() {
+        return delivery;
     }
 
-    public void setDeliveryList(List<Delivery> deliveryList) {
-        this.deliveryList = deliveryList;
+    public void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
     }
 
     public String getDescription() {
@@ -151,9 +142,6 @@ public class Order {
     }
 
     public List<Item> getItems() {
-        // id == null <- is it new Order?
-        items = items == null ? (id == null ? (new ArrayList<>()) : (ApplicationContextFactory.getApplicationContext().getBean(OrderService.class).findItems(this))) : items;
-        updateSummaryAndAmount();
         return items;
     }
 
@@ -162,53 +150,22 @@ public class Order {
     }
 
     public BigDecimal getSummary() {
-        if (summary != null) return summary;
-
-        updateSummaryAndAmount();
         return summary;
     }
 
+    public String getUpdatedSummary() {
+        return format.format(summary);
+    }
+
     public String getSummaryFormat() {
-        return decimalFormat.format(getSummary());
+        return format.format(getSummary());
     }
 
     public void setSummary(BigDecimal summary) {
         this.summary = summary;
     }
 
-    // updates summary based on items collection
-    // @return summary
-    public void updateSummaryAndAmount() {
-        BigDecimal summary = BigDecimal.ZERO;
-        Integer amount = 0;
-        if (items == null) items = getItems();
-        for (Item item : items) {
-            summary = summary.add(item.getSumVAT());
-            amount = amount + item.getAmount();
-        }
-        if (!amount.equals(this.amount)) {
-            this.amount = amount;
-            if (this.id != null) {
-                ApplicationContextFactory.getApplicationContext()
-                        .getBean("orderService", OrderService.class)
-                        .update(this);
-            }
-        }
-        summary = summary.setScale(2, BigDecimal.ROUND_HALF_UP);
-        if (!summary.equals(this.summary)) {
-            this.summary = summary;
-            if (this.id != null) {
-                ApplicationContextFactory.getApplicationContext()
-                        .getBean("orderService", OrderService.class)
-                        .update(this);
-            }
-        }
-    }
-
     public Integer getAmount() {
-        if (amount != null) return amount;
-
-        updateSummaryAndAmount();
         return amount;
     }
 
@@ -216,18 +173,20 @@ public class Order {
         this.amount = amount;
     }
 
-    public SimpleStringProperty summaryProperty() {
-        return new SimpleStringProperty(decimalFormat.format(getSummary()));
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        System.out.println("destroyed!");
     }
 
-    @Override
+    /*@Override
     public String toString() {
         return "Order{" +
                 "manager='" + manager.shortInfo() + "'" +
                 ", customer='" + customer + "'" +
                 ", date='" + date + "'" +
                 ", status='" + status + "'" +
-                /*", summary='" + summary + "'" +*/
+                ", summary='" + summary + "'" +
                 '}';
-    }
+    }*/
 }

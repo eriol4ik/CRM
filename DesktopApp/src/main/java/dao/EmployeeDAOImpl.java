@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository("employeeDAO")
-public class EmployeeDAOImpl extends DAOImpl<Employee> implements EmployeeDAO {
+public class EmployeeDAOImpl extends DAOImpl<Employee, Long> implements EmployeeDAO {
     @Autowired
     private SessionFactory factory;
 

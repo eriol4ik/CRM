@@ -77,16 +77,16 @@ public class LoginController {
                 setStatusMsg(UserStatus.SUCCESS);
                 switch (user.getEmployee().getPosition()) {
                     case ADMIN:
-                        StageFactory.loadWindow("/view/admin_panel2.fxml", "Administration", user.getId());
+                        StageFactory.loadWindow("/view/admin_panel2.fxml", "Administration", user.getLogin());
                         break;
                     case MANAGER:
-                        StageFactory.loadWindow("/view/manager_panel.fxml", "Management", user.getId());
+                        StageFactory.loadWindow("/view/manager_panel.fxml", "Management", user.getLogin());
                         break;
                     case CASHIER:
-                        StageFactory.loadWindow("/view/cashier_panel.fxml", "Cashier", user.getId());
+                        StageFactory.loadWindow("/view/cashier_panel.fxml", "Cashier", user.getLogin());
                         break;
                     case STOREKEEPER:
-                        StageFactory.loadWindow("/view/storage_panel_two.fxml", "Storage", user.getId());
+                        StageFactory.loadWindow("/view/storage_panel_two.fxml", "Storage", user.getLogin());
                         break;
                 }
                 return;

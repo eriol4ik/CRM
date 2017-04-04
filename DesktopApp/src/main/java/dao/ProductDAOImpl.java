@@ -1,16 +1,15 @@
 package dao;
 
-import dao.DAOImpl;
+import entity.Product;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import entity.Product;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository("productDAO")
-public class ProductDAOImpl extends DAOImpl<Product> implements ProductDAO {
+public class ProductDAOImpl extends DAOImpl<Product, Long> implements ProductDAO {
     @Autowired
     private SessionFactory factory;
 
@@ -42,5 +41,11 @@ public class ProductDAOImpl extends DAOImpl<Product> implements ProductDAO {
                 .setFirstResult(from)
                 .setMaxResults(limit)
                 .list();
+    }
+
+    @Override
+    public Long getNumberOfRows() {
+        return (Long) factory.getCurrentSession()
+                .createQuery("SELECT COUNT(*) FROM Product").uniqueResult();
     }
 }

@@ -10,7 +10,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import org.springframework.context.ApplicationContext;
 import service.ProductService;
@@ -131,7 +130,7 @@ public class StorageItemsController {
 
     @FXML
     public void closeButtonOnAction() {
-        StageFactory.loadWindow("/view/storage_panel_two.fxml", "Storage", -1L);
+        StageFactory.loadWindow("/view/storage_panel_two.fxml", "Storage", "-1L");
     }
 
     @FXML

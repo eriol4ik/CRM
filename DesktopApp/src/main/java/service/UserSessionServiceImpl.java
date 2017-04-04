@@ -4,7 +4,6 @@ import dao.UserSessionDAO;
 import entity.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
@@ -14,7 +13,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 @Service("userSessionService")
-public class UserSessionServiceImpl extends ServiceImpl<UserSession> implements UserSessionService {
+public class UserSessionServiceImpl extends ServiceImpl<UserSession, String> implements UserSessionService {
     @Autowired
     @Qualifier("userSessionDAO")
     private UserSessionDAO userSessionDAO;
@@ -31,14 +30,14 @@ public class UserSessionServiceImpl extends ServiceImpl<UserSession> implements 
     // if yes checks the session in DB
     // if exists method returns UserSession
     private UserSession readFromResource() {
-        Long userId;
+        String userId;
         Integer sessionId;
 
         InputStream stream = UserSession.class.getResourceAsStream("/session.properties");
         if (stream == null) return null;
         Scanner scanner = new Scanner(stream);
 
-        if (scanner.hasNextLong()) userId = scanner.nextLong();
+        if (scanner.hasNext()) userId = scanner.next();
         else return null;
 
         if (scanner.hasNextInt()) sessionId = scanner.nextInt();
@@ -70,7 +69,7 @@ public class UserSessionServiceImpl extends ServiceImpl<UserSession> implements 
     // if userId == null delete local and DB data; returns deleted UserSession
     @Override
     @Transactional
-    public UserSession writeToResource(Long userId) {
+    public UserSession writeToResource(String userId) {
         UserSession userSession = new UserSession(userId);
         UserSession from = readFromResource();
 
