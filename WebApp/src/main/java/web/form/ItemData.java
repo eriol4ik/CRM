@@ -1,22 +1,22 @@
 package web.form;
 
 public class ItemData {
-    private String id;
-    private String qty;
+    private Long id;
+    private Integer amount;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getQty() {
-        return qty;
+    public Integer getAmount() {
+        return amount;
     }
 
-    public void setQty(String qty) {
-        this.qty = qty;
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 }

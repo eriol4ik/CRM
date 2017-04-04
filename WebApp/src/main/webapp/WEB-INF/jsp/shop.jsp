@@ -11,12 +11,12 @@
   </head>
   <body>
     <%@include file="embedded/menu.jsp"%>
-    
+
     <div class="product-big-title-area">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="product-bit-title text-center">
+                    <div class="product-big-title text-center">
                         <h2>iPhone</h2>
                     </div>
                 </div>

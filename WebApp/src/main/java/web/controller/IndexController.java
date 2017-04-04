@@ -1,19 +1,23 @@
 package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import web.form.Cart;
+import web.service.ProductService;
 
 @Controller
 public class IndexController {
     @Autowired
-    private ApplicationContext context;
+    private ProductService productService;
+    @Autowired
+    private Cart cart;
 
     @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public String index(Model model) {
-        System.out.println(model.asMap());
+        cart.init();
+        model.addAttribute("recentProducts", productService.findInRange(1, 10, "id", false));
         return "index";
     }
 
@@ -26,6 +30,12 @@ public class IndexController {
     public String checkout() {
         return "checkout";
     }
+
+    @RequestMapping(value = "/accessories", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public String accessories() {
+        return "accessories";
+    }
+
 
     @RequestMapping(value = "/single-product", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String singleProduct() {

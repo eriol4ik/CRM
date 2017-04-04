@@ -1,21 +1,9 @@
-// opens menu when hover on it
-$('#userMenu').hover(
-    function () {
-        if ($('.dropdown.open').length == 0) {
-            $('.dropdown .dropdown-toggle').dropdown("toggle");
-            document.getElementById("inputEmail").focus();
-        }
-    },
-    function () {}
-);
-
 function logOut() {
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://" + window.location.host + "/logout");
     xhttp.send();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            alert("here");
             document.getElementById("uMenu").innerHTML = this.responseText;
         }
     }
@@ -37,7 +25,6 @@ function logIn() {
         xhttp.send(JSON.stringify(obj));
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                alert("here");
                 document.getElementById("uMenu").innerHTML = this.responseText;
             }
         };
@@ -45,7 +32,7 @@ function logIn() {
 }
 
 function addToCart(id) {
-    var data = {"id":id, "qty":1};
+    var data = {"id":id, "amount":1};
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",
@@ -54,7 +41,7 @@ function addToCart(id) {
         timeout: 100000,
         success: function(data) {
             document.getElementById("addToCart" + id).innerHTML = data;
-            updateSummary();
+            updateCartData();
         },
         error: function() {
             console.log("error during adding product to cart");
@@ -62,10 +49,10 @@ function addToCart(id) {
     });
 }
 
-function updateSummary() {
+function updateCartData() {
     $.ajax({
         type: "POST",
-        url: "http://" + window.location.host + "/updateorderdata",
+        url: "http://" + window.location.host + "/updatecartdata",
         timeout: 100000,
         success: function(data) {
             var json = JSON.parse(data);
@@ -146,10 +133,127 @@ function submitOrder() {
             timeout: 100000,
             success: function(data) {
                 document.getElementById("order-form").innerHTML = data;
+                $('html,body').animate({
+                        scrollTop: $("body").offset().top},
+                    'slow');
+                document.getElementById("summary").innerHTML = "0,00 грн.";
+                document.getElementById("amount").innerHTML = "0";
             },
             error: function() {
                 alert("error")
             }
         });
     }
+}
+
+function submitOrderForCustomer() {
+    var $name = $("#deliveryName");
+    var $phone = $("#deliveryPhone");
+    var $city = $("#deliveryCity");
+    var $street = $("#deliveryStreet");
+    var $houseNumber = $("#deliveryHouseNumber");
+
+    if ($name.val() != "" && $phone.val() != "") {
+        var data = {
+            "name":$name.val(),
+            "phone":$phone.val(),
+            "city":$city.val(),
+            "street":$street.val(),
+            "houseNumber":$houseNumber.val(),
+        };
+        $.ajax({
+            type: "POST",
+            url: "http://" + window.location.host + "/submitorderforcustomer",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            timeout: 100000,
+            success: function(data) {
+                document.getElementById("order-form").innerHTML = data;
+                $('html,body').animate({
+                        scrollTop: $("body").offset().top},
+                    'slow');
+                document.getElementById("summary").innerHTML = "0,00 грн.";
+                document.getElementById("amount").innerHTML = "0";
+            },
+            error: function() {
+                alert("error")
+            }
+        });
+    }
+}
+
+$("button").click(function() {
+    $('html,body').animate({
+            scrollTop: $(".second").offset().top},
+        'slow');
+});
+
+function setItemAmount(id, amount) {
+    var data = {"id":id, "amount":amount};
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "http://" + window.location.host + "/setitemamount",
+        data: JSON.stringify(data),
+        timeout: 100000,
+        success: function(data) {
+            var json = JSON.parse(data);
+            document.getElementById("summary").innerHTML = json.summary + " грн.";
+            document.getElementById("amount").innerHTML = json.amount;
+
+            document.getElementById("sum-total").innerHTML = json.summary + " грн.";
+            document.getElementById("amount-total").innerHTML = json.amount;
+
+            if (json.amount == "0") {
+                document.getElementById("cart-items").innerHTML = "<div class='cart-no-items'>" +
+                    "В корзине нет товаров." + "</div>";
+            }
+            if (amount != "0") {
+                document.getElementById("item-sum" + id).innerHTML = json.itemSum + " грн.";
+            }
+
+        },
+        error: function() {
+            alert("error");
+            console.log("error during adding product to cart");
+        }
+    });
+}
+
+function addOne(id) {
+    var newAmount = parseInt(document.getElementById("amount" + id).value) + 1;
+    document.getElementById("amount" + id).value = newAmount;
+
+    setItemAmount(id, newAmount);
+}
+
+function subtractOne(id) {
+    var newAmount = parseInt(document.getElementById("amount" + id).value) - 1;
+    if (newAmount === 0) return;
+    document.getElementById("amount" + id).value = newAmount;
+
+    setItemAmount(id, newAmount);
+}
+
+function removeItem(id) {
+    $("#cart-item" + id).remove();
+
+    setItemAmount(id, 0);
+}
+
+function clearCart() {
+    $.ajax({
+        type: "POST",
+        url: "http://" + window.location.host + "/clearcart",
+        timeout: 100000,
+        success: function(data) {
+            document.getElementById("summary").innerHTML = "0,00 грн.";
+            document.getElementById("amount").innerHTML = "0";
+            document.getElementById("cart-items").innerHTML = data;
+        },
+        error: function() {
+            alert("error");
+            console.log("error during adding product to cart");
+        }
+    });
 }

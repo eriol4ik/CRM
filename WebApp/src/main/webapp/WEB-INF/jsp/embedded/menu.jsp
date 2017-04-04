@@ -4,42 +4,21 @@
 <div class="header-area">
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
-                <div class="user-menu">
-                    <ul>
-                        <li id="uMenu" class="dropdown">
-                            <c:if test="${customer != null}">
-                                <%@include file="user-form.jsp"%>
-                            </c:if>
-                            <c:if test="${customer == null}">
-                                <%@include file="login-form.jsp"%>
-                            </c:if>
-                        </li>
-                        <li><a href="cart"><i class="fa fa-shopping-cart"></i>Корзина</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="header-right">
-                    <ul class="list-unstyled list-inline">
-                        <li class="dropdown dropdown-small">
-                            <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">Валюта :</span><span class="value">UAH</span><b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">UAH</a></li>
-                                <li><a href="#">USD</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="dropdown dropdown-small">
-                            <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">Язык :</span><span class="value">Русский </span><b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Русский</a></li>
-                                <li><a href="#">English</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+            <div class="user-menu">
+                <ul>
+                    <li id="uMenu" class="dropdown">
+                        <c:if test="${customer != null}">
+                            <%@include file="user-form.jsp"%>
+                        </c:if>
+                        <c:if test="${customer == null}">
+                            <%@include file="login-form.jsp"%>
+                        </c:if>
+                    </li>
+                    <li><a href="cart"><i class="fa fa-shopping-cart"></i>Корзина</a></li>
+                    <li style="float: right; position: relative">
+                        <span class="contacts"><b>Наши контакты</b>: (099) 66-77-888, (066) 22-33-444</span>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -56,7 +35,7 @@
 
             <div class="col-sm-6">
                 <div class="shopping-item">
-                    <a href="cart">Корзина - <span id="summary" class="cart-amount">${order != null ? order.summaryFormat : 0} грн.</span> <i class="fa fa-shopping-cart"></i> <span class="product-count" id="amount">${order.amount}</span></a>
+                    <a href="cart">Корзина - <span id="summary" class="cart-amount">${sessionScope['scopedTarget.cart'].sumFormat} грн.</span> <i class="fa fa-shopping-cart"></i> <span class="product-count" id="amount">${sessionScope['scopedTarget.cart'].amount}</span></a>
                 </div>
             </div>
         </div>

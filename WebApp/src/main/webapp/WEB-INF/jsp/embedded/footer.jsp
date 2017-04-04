@@ -6,7 +6,7 @@
             <div class="col-md-3 col-sm-6">
                 <div class="footer-about-us">
                     <h2>i<span>Shop</span></h2>
-                    <p>Многие из нас предпочитают онлайн магазины, так как это лучший способ сохранить время и деньги. Если Вы заинтересованы электроникой или просто ищите аксессуар к Вашему мобильному телефону или другому гаджету. Наш онлайн магазин "iShop" предлагает Вам эту прекрасную возможность.</p>
+                    <p>Присоединяйтесь к нам в социальных сетях:</p>
                     <div class="footer-social">
                         <a href="#" target="_blank"><i class="fa fa-facebook"></i></a>
                         <a href="#" target="_blank"><i class="fa fa-vk"></i></a>
@@ -19,26 +19,29 @@
                 <div class="footer-menu">
                     <h2 class="footer-wid-title">Навигация по сайту</h2>
                     <ul>
-                        <li><a href="#">Мой аккаунт</a></li>
-                        <li><a href="#">Корзина</a></li>
-                        <li><a href="#">Главная страница</a></li>
-                        <li><a href="#">iPhone</a></li>
-                        <li><a href="#">Аксессуары</a></li>
-                        <li><a href="#">Контакты</a></li>
+                        <li><a href="/">Главная страница</a></li>
+                        <li><a href="shop">iPhone</a></li>
                     </ul>
                 </div>
             </div>
 
-            <div class="col-md-6 col-sm-6">
-                <div class="footer-newsletter">
-                    <h2 class="footer-wid-title">Рассылка</h2>
-                    <p>Подпишитесь на нашу рассылку и Вы получите специальные предложения на почтовый ящик!</p>
-                    <div class="newsletter-form">
-                        <form action="#">
-                            <input type="email" placeholder="Введите ваш email">
-                            <input type="submit" value="Подписаться">
-                        </form>
-                    </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="footer-menu">
+                    <h2 class="footer-wid-title">&#160;</h2>
+                    <ul>
+                        <li><a href="#">Мой аккаунт</a></li>
+                        <li><a href="cart">Корзина</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="footer-menu">
+                    <h2 class="footer-wid-title">&#160;</h2>
+                    <ul>
+                        <li><a href="#">Аксессуары</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
                 </div>
             </div>
         </div>

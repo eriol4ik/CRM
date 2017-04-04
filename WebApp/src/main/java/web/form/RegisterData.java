@@ -7,7 +7,9 @@ public class RegisterData {
     private String name;
     private String surname;
     private String phone;
-    private String address;
+    private String city;
+    private String street;
+    private String houseNumber;
 
     public String getEmail() {
         return email;
@@ -57,11 +59,27 @@ public class RegisterData {
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCity() {
+        return city;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getHouseNumber() {
+        return houseNumber;
+    }
+
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
     }
 }

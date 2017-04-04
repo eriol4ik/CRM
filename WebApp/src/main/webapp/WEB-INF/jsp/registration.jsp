@@ -55,12 +55,16 @@
     </span>
     <div class="input-group">
         <span class="input-group-addon"><i style="width: 18px" class="fa fa-map-marker"></i></span>
-        <input type="text" name="address" id="regAddress" placeholder="Адрес">
+        <input type="text" name="address" id="regCity" placeholder="Город">
     </div>
-    <span style="color: rgba(0,0,0,0.5)">
-        <i style="margin: 0 25px 0 15px" class="fa fa-question-circle-o" aria-hidden="true"></i>
-        ул. Васильковская, 7, Киев, 02000
-    </span>
+    <div class="input-group">
+        <span class="input-group-addon"><i style="width: 18px" class="fa fa-map-marker"></i></span>
+        <input type="text" name="address" id="regStreet" placeholder="Улица">
+    </div>
+    <div class="input-group">
+        <span class="input-group-addon"><i style="width: 18px" class="fa fa-map-marker"></i></span>
+        <input type="text" name="address" id="regHouseNumber" placeholder="Номер дома, квартиры (по желанию)">
+    </div>
 
     <div class="form-group">
         <button onclick="checkFields()">Зарегистрироваться</button>
@@ -79,7 +83,9 @@
     var $passwordMismatch = $("#passwordMismatch");
     var $regName = $("#regName");
     var $regSurname = $("#regSurname");
-    var $regAddress = $("#regAddress");
+    var $regCity = $("#regCity");
+    var $regStreet = $("#regStreet");
+    var $regHouseNumber = $("#regHouseNumber");
 
     function isEmpty(el) {
         $(el).css("border-color", el.value.length > 0 ? "#67b168" : "rgba(255,0,0,0.5)");
@@ -110,7 +116,9 @@
     $regName.blur(function () {isEmpty(this)});
     $regSurname.blur(function () {
         isEmpty(this)});
-    $regAddress.blur(function () {isEmpty(this)});
+    $regCity.blur(function () {isEmpty(this)});
+    $regStreet.blur(function () {isEmpty(this)});
+    $regHouseNumber.blur(function () {isEmpty(this)});
 
     function checkFields() {
         if (emailRegEx.test($regEmail.val()) &&
@@ -120,7 +128,9 @@
                 $confirmRegPassword.val() == $regPassword.val() &&
                 $regName.val().length > 0 &&
                 $regSurname.val().length > 0 &&
-                $regAddress.val().length > 0) {
+                $regCity.val().length > 0 &&
+                $regStreet.val().length > 0 &&
+                $regHouseNumber.val().length > 0) {
 
             var xhttp = new XMLHttpRequest();
             xhttp.open("POST", "http://" + window.location.host + "/finishReg");
@@ -131,7 +141,9 @@
                        "name":$regName.val(),
                        "surname":$regSurname.val(),
                        "phone":$regPhone.val(),
-                       "address":$regAddress.val()};
+                       "city":$regCity.val(),
+                       "street":$regStreet.val(),
+                       "houseNumber":$regHouseNumber.val()};
             xhttp.send(JSON.stringify(obj));
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {

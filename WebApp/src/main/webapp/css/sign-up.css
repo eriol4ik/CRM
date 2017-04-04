@@ -23,3 +23,9 @@ div .input-group-addon {
     border: 1px solid #ddd;
     border-radius: 0;
 }
+
+.login-a {
+    display: inline !important;
+    margin-right: 0 !important;
+    padding: 0 !important;
+}

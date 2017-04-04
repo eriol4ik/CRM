@@ -21,7 +21,9 @@ public class Customer implements Serializable {
     @Column(unique = true)
     private String mobile;
 
-    private String address;
+    private String city;
+    private String street;
+    private String houseNumber;
 
     @OneToMany
     @JoinColumn(name = "CUSTOMER_ID")
@@ -33,12 +35,13 @@ public class Customer implements Serializable {
 
     public Customer() {}
 
-    public Customer(String name, String surname, String mobile, String address, CustomerAccount account) {
+    public Customer(String name, String surname, String mobile, String city, String street, String houseNumber) {
         this.name = name;
         this.surname = surname;
         this.mobile = mobile;
-        this.address = address;
-        this.account = account;
+        this.city = city;
+        this.street = street;
+        this.houseNumber = houseNumber;
     }
 
     public Long getId() {
@@ -73,12 +76,28 @@ public class Customer implements Serializable {
         this.mobile = mobile;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCity() {
+        return city;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getHouseNumber() {
+        return houseNumber;
+    }
+
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
     }
 
     public List<Order> getOrders() {

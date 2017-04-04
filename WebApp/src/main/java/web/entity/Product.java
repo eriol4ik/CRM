@@ -133,4 +133,23 @@ public class Product implements Serializable {
     public String toString() {
         return name + ": " + price;
     }
+
+    @Override
+    public int hashCode() {
+        return 31 * id.hashCode() +
+                31 * name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true;
+
+        if (obj.getClass() != getClass()) return false;
+        Product product = (Product) obj;
+
+        if (this.id == null || product.id == null) return false;
+
+        return this.id.equals(product.id) && this.name.equals(product.name);
+    }
 }

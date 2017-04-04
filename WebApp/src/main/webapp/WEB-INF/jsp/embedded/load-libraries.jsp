@@ -1,7 +1,7 @@
 <!-- Latest jQuery form server -->
-<script src="../../js/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery.min.js"></script>
 
-<!-- Bootstrap JS form CDN -->
+<!-- Bootstrap JS from CDN -->
 <script src="../../js/bootstrap.min.js"></script>
 
 <!-- jQuery sticky menu -->

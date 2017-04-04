@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" href="../../../css/sign-in.css">
 <a class="dropdown-toggle" href="#"><i class="fa fa-user"></i>Аккаунт</a>
 <div class="dropdown-menu">
     <div>
@@ -20,16 +19,3 @@
         Don't have an account? <a class="login-a" href="/register">Sign up</a>
     </div>
 </div>
-
-<script>
-    $('#userMenu').hover(
-        function () {
-            if ($('.dropdown.open').length == 0) {
-                $('.dropdown .dropdown-toggle').dropdown("toggle");
-                document.getElementById("inputEmail").focus();
-            }
-        },
-        function () {}
-    );
-</script>
-

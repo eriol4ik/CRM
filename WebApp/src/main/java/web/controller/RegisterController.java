@@ -30,7 +30,9 @@ public class RegisterController {
         customer.setName(data.getName());
         customer.setSurname(data.getSurname());
         customer.setMobile(data.getPhone());
-        customer.setAddress(data.getAddress());
+        customer.setCity(data.getCity());
+        customer.setStreet(data.getStreet());
+        customer.setHouseNumber(data.getHouseNumber());
         customer.setAccount(customerAccount);
         customerService.create(customer);
 

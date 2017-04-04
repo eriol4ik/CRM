@@ -51,6 +51,12 @@ body { font-family: 'Titillium Web', sans-serif; }
     margin-right: 5px;
     padding: 10px;
 }
+.contacts {
+    display: block;
+    font-size: 16px;
+    margin-right: 5px;
+    padding: 10px;
+}
 .user-menu li a i.fa {
     margin-right: 5px;
 }
@@ -80,7 +86,20 @@ text-transform: uppercase;
 width: 100%;
 z-index: 999;}
 
+.latest-product .owl-nav {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
 
+.latest-product .owl-nav div, .related-products-wrapper .owl-nav div {
+    border: 1px solid #1abc9c;
+    color: #1abc9c;
+    display: inline-block;
+    margin-left: 15px;
+    padding: 1px 10px;
+}
+.latest-product .owl-nav div:hover, .brand-wrapper .owl-nav div:hover, .related-products-wrapper .owl-nav div:hover {color: #222;border-color: #222}
 
 .logo h1 {
     font-size: 40px;
@@ -711,6 +730,18 @@ input[type="submit"]:hover, button[type=submit]:hover {background-color: #222}
     color: #fff;
     text-decoration: none;
 }
+.simple_button {
+    background: none repeat scroll 0 0 #1abc9c;
+    border: medium none;
+    color: #fff;
+    padding: 11px 20px;
+    float: left;
+    text-transform: uppercase;
+}
+.simple_button:hover {
+    background-color: #222;
+}
+
 .added_to_cart {
     width: 40px;
     height: 40px;
@@ -972,6 +1003,13 @@ table.shop_table td.product-remove a {
   display: inline-block;
   padding: 0 5px 2px;
   text-transform: uppercase;
+}
+
+.remove {
+    background-color: transparent;
+    border: medium none;
+    color: #1ABC9C;
+    padding: 11px 20px;
 }
 
 
